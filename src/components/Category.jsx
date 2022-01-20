@@ -1,14 +1,51 @@
 import React from "react";
-import { FormCheck } from "react-bootstrap";
+import { FormCheck, Button } from "react-bootstrap";
 
-export default function Category({ products, moveProducts }) {
+export default function Category({
+  products,
+  moveProducts,
+  categoryName,
+  checkedProducts,
+  handleSelectingProduct,
+}) {
+  const capitilizedCategory =
+    categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   return (
     <div>
+      <h2>{capitilizedCategory}</h2>
       {products &&
         products.map((product) => {
-          return <FormCheck type="checkbox" label={product} key={product} />;
+          return (
+            <FormCheck
+              type="checkbox"
+              label={product}
+              key={product}
+              onClick={(e) => {
+                handleSelectingProduct(e.target.checked, product, categoryName);
+              }}
+            />
+          );
         })}
-      <button onClick={moveProducts}>Move them here</button>
+      <Button
+        disabled={
+          checkedProducts.products
+            ? checkedProducts.products.length === 0
+            : true
+        }
+        onClick={() => moveProducts(categoryName)}
+      >
+        Move them here
+      </Button>
+      <Button
+        disabled={
+          checkedProducts[categoryName]
+            ? checkedProducts[categoryName].length === 0
+            : true
+        }
+        onClick={() => moveProducts(categoryName, true)}
+      >
+        Remove them from here
+      </Button>
     </div>
   );
 }
