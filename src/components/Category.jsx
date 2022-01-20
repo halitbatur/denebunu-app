@@ -7,9 +7,19 @@ export default function Category({
   categoryName,
   checkedProducts,
   handleSelectingProduct,
+  deleteCategory,
 }) {
   const capitilizedCategory =
     categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+  const noProductsToAdd = checkedProducts.products
+    ? checkedProducts.products.length === 0
+    : true;
+
+  const noProductsToRemove = checkedProducts[categoryName]
+    ? checkedProducts[categoryName].length === 0
+    : true;
+
   return (
     <div>
       <h2>{capitilizedCategory}</h2>
@@ -27,25 +37,22 @@ export default function Category({
           );
         })}
       <Button
-        disabled={
-          checkedProducts.products
-            ? checkedProducts.products.length === 0
-            : true
-        }
+        disabled={noProductsToAdd}
         onClick={() => moveProducts(categoryName)}
       >
-        Move them here
+        {noProductsToAdd
+          ? "Add Products"
+          : "Add " + checkedProducts.products?.length + " products"}
       </Button>
       <Button
-        disabled={
-          checkedProducts[categoryName]
-            ? checkedProducts[categoryName].length === 0
-            : true
-        }
+        disabled={noProductsToRemove}
         onClick={() => moveProducts(categoryName, true)}
       >
-        Remove them from here
+        {noProductsToRemove
+          ? "Remove Products"
+          : "Remove " + checkedProducts[categoryName].length + " products"}
       </Button>
+      <Button onClick={() => deleteCategory()}>Delete Category</Button>
     </div>
   );
 }

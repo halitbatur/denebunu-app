@@ -4,6 +4,7 @@ import { FormCheck } from "react-bootstrap";
 export default function Products({ products, handleSelectingProduct }) {
   return (
     <div>
+      <h2>Available products</h2>
       {products &&
         products.map((product) => (
           <FormCheck

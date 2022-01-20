@@ -9,7 +9,9 @@ export default function Home() {
   const [currentProducts, setCurrentProducts] = React.useState(products);
   const categoryNumber = React.useRef(1);
   const [checkedProducts, setCheckedProducts] = React.useState({});
-  const [categorizedProducts, setCategorizedProducts] = React.useState({});
+  const [categorizedProducts, setCategorizedProducts] = React.useState({
+    category1: [],
+  });
 
   const handleSelectingProduct = (value, name, location) => {
     if (value) {
@@ -47,6 +49,7 @@ export default function Home() {
       setCheckedProducts({ ...checkedProducts, products: [] });
       return;
     }
+    // Handles the removing from category back to the products list
     setCurrentProducts([...currentProducts, ...checkedProducts[categoryName]]);
     setCategorizedProducts({
       ...categorizedProducts,
@@ -59,6 +62,18 @@ export default function Home() {
     setCheckedProducts({ ...checkedProducts, [categoryName]: [] });
   };
 
+  const deleteCategory = (categoryName) => {
+    setCurrentProducts([
+      ...currentProducts,
+      ...categorizedProducts[categoryName],
+    ]);
+    setCategorizedProducts((prevState) => {
+      const editedCategorizedProducts = { ...prevState };
+      delete editedCategorizedProducts[categoryName];
+      return editedCategorizedProducts;
+    });
+  };
+
   return (
     <Container>
       <Row>
@@ -68,7 +83,10 @@ export default function Home() {
             setCheckedProducts={setCheckedProducts}
             handleSelectingProduct={handleSelectingProduct}
           />
-          <Review />
+          <Review
+            categorizedProducts={categorizedProducts}
+            currentProducts={currentProducts}
+          />
         </Col>
         <Col>
           {Object.keys(categorizedProducts).map((categoryName) => (
@@ -80,20 +98,16 @@ export default function Home() {
               setCheckedProducts={setCheckedProducts}
               products={categorizedProducts[categoryName]}
               handleSelectingProduct={handleSelectingProduct}
+              deleteCategory={() => deleteCategory(categoryName)}
             />
           ))}
           <Button
             onClick={() => {
-              setCategorizedProducts(
-                (prevState) => {
-                  const newCategory = "category" + categoryNumber.current;
-
-                  return { ...prevState, [newCategory]: [] };
-                },
-                () => {
-                  categoryNumber.current += 1;
-                }
-              );
+              categoryNumber.current += 1;
+              setCategorizedProducts((prevState) => {
+                const newCategory = "category" + categoryNumber.current;
+                return { ...prevState, [newCategory]: [] };
+              });
             }}
           >
             Add category
