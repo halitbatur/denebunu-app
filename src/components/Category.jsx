@@ -20,7 +20,7 @@ export default function Category({
     ? checkedProducts[categoryName].length === 0
     : true;
 
-  const buttons = [
+  const categoryButtons = [
     {
       disabled: noProductsToAdd,
       onClick: () => moveProducts(categoryName),
@@ -92,7 +92,7 @@ export default function Category({
       <div
         style={{ display: "flex", justifyContent: "start", columnGap: "10px" }}
       >
-        {buttons.map((button) => {
+        {categoryButtons.map((button) => {
           return (
             <Button
               disabled={button.disabled}
