@@ -15,6 +15,7 @@ export default function Home() {
   const [show, setShow] = React.useState(false);
 
   const handleSelectingProduct = (value, name, location) => {
+    // If there's a value which means the product is checked
     if (value) {
       setCheckedProducts((prevState) => {
         if (prevState[location]) {
@@ -33,6 +34,7 @@ export default function Home() {
   };
 
   const moveProducts = (categoryName, isRemove) => {
+    // Checks if a product is getting removed or added
     if (!isRemove) {
       setCurrentProducts((prevState) => {
         const filtredCurrentProducts = prevState.filter(

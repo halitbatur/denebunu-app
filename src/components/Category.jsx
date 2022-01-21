@@ -20,6 +20,29 @@ export default function Category({
     ? checkedProducts[categoryName].length === 0
     : true;
 
+  const buttons = [
+    {
+      disabled: noProductsToAdd,
+      onClick: () => moveProducts(categoryName),
+      content: noProductsToAdd
+        ? "Add Products"
+        : "Add " + checkedProducts.products?.length + " products",
+    },
+    {
+      disabled: noProductsToRemove,
+      onClick: () => moveProducts(categoryName, true),
+      content: noProductsToRemove
+        ? "Remove Products"
+        : "Remove " + checkedProducts[categoryName].length + " products",
+    },
+    {
+      disabled: false,
+      onClick: () => deleteCategory(),
+      content: " Remove Category",
+      style: { marginLeft: "auto" },
+    },
+  ];
+
   return (
     <div
       style={{
@@ -69,25 +92,17 @@ export default function Category({
       <div
         style={{ display: "flex", justifyContent: "start", columnGap: "10px" }}
       >
-        <Button
-          disabled={noProductsToAdd}
-          onClick={() => moveProducts(categoryName)}
-        >
-          {noProductsToAdd
-            ? "Add Products"
-            : "Add " + checkedProducts.products?.length + " products"}
-        </Button>
-        <Button
-          disabled={noProductsToRemove}
-          onClick={() => moveProducts(categoryName, true)}
-        >
-          {noProductsToRemove
-            ? "Remove Products"
-            : "Remove " + checkedProducts[categoryName].length + " products"}
-        </Button>
-        <Button style={{ marginLeft: "auto" }} onClick={() => deleteCategory()}>
-          Remove Category
-        </Button>
+        {buttons.map((button) => {
+          return (
+            <Button
+              disabled={button.disabled}
+              onClick={button.onClick}
+              style={button.style}
+            >
+              {button.content}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );
