@@ -2,7 +2,7 @@ import React from "react";
 import Category from "../components/Category";
 import Products from "../components/Products";
 import Review from "../components/Review";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import products from "../static/products";
 
 export default function Home() {
@@ -12,6 +12,7 @@ export default function Home() {
   const [categorizedProducts, setCategorizedProducts] = React.useState({
     category1: [],
   });
+  const [show, setShow] = React.useState(false);
 
   const handleSelectingProduct = (value, name, location) => {
     if (value) {
@@ -63,6 +64,10 @@ export default function Home() {
   };
 
   const deleteCategory = (categoryName) => {
+    if (Object.keys(categorizedProducts).length === 1) {
+      setShow(true);
+      return;
+    }
     setCurrentProducts([
       ...currentProducts,
       ...categorizedProducts[categoryName],
@@ -109,9 +114,19 @@ export default function Home() {
                 return { ...prevState, [newCategory]: [] };
               });
             }}
+            style={{ width: "100%" }}
           >
             Add category
           </Button>
+          <Alert
+            variant="danger"
+            onClose={() => setShow(false)}
+            show={show}
+            dismissible
+            style={{ marginTop: "10px" }}
+          >
+            There need to be atleast 1 category!
+          </Alert>
         </Col>
       </Row>
     </Container>
